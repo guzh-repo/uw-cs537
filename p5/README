@@ -1,0 +1,41 @@
+xv6:
+  mkfs is rewritten.
+  xv6{,-bonus}/tools/mkfs.c
+
+bonus:
+  seems work but not tested extensively
+  a big file is generated at Makefile line 161 using `seq`
+  
+data structure:
+  also can be found in tools/mkfs.c
+
++------------+
+|            |                double_indirect_directory_t
+|            |                       +-------------+         +------------+
+|            |                   +-->|dindirect_idx+-------->|DataPointers|
+|            |                   |   |dindirect_idx+---+     |Checksums   |
++------------+                   |   |dindirect_idx+-+ |     |     .      |
+|DataPointers|                   |   |      .      | | |     |     .      |
+|Checksums   |                   |   |      .      | | |     +------------+
+|     .      |                   |   |      .      | | |     double_indirect_t
++------------+    +------------+ |   |      .      | | |
+|indirect_idx+--->|DataPointers| |   |      .      | | |  +------------+
++------------+    |Checksums   | |   +-------------+ | +->|DataPointers|
+ inode_t          |     .      | |                   |    |Checksums   |
+                  |     .      | |                   |    |     .      |
+                  +------------+ |                   |    |     .      |
+                  |dir_idx     +-+                   |    +------------+
+                  |unused      |                     |    double_indirect_t
+                  +------------+                     |
+                   indirect_t                        |  +------------+
+                                                     +->|DataPointers|
+                                                        |Checksums   |
+                                                        |     .      |
+                                                        |     .      |
+                                                        +------------+
+                                                        double_indirect_t
+
+                                                              .
+                                                              .
+                                                              .
+
